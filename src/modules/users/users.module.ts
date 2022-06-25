@@ -12,6 +12,9 @@ import { UCR } from './entity/UCR.entity';
 import { User } from './entity/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { LoggerService } from './logger/logger.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { AuthController } from './auth/auth.controller';
     FirmService,
     FirmService,
     AuthModule,
+    AuthService,
+    JwtService,
+    LoggerService
   ],
   exports: [UserService],
   controllers: [UserController, AuthController],

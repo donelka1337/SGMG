@@ -11,19 +11,18 @@ import { User } from '../entity/user.entity';
 
 @Module({
   imports: [
-    PassportModule,
-    LoggerModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          privateKey: configService.get<string>('keys.privateKey'),
-          publicKey: configService.get<string>('keys.publicKey'),
+          secret: `${process.env.PRIVATE_KEY}`,
           signOptions: { expiresIn: '60s', algorithm: 'RS256' },
         };
       },
       inject: [ConfigService],
     }),
+    PassportModule,
+    LoggerModule,
     TypeOrmModule.forFeature([User]),
   ],
   providers: [JwtStrategy, AuthService],

@@ -13,6 +13,5 @@ async function bootstrap() {
   app.enableCors();
   logger.verbose(`Database URI => ${configService.get('database.uri')}`);
   logger.verbose(`Application listening on port => ${configService.get('port')}`);
-  await app.listen(configService.get('port'));
 }
 bootstrap();

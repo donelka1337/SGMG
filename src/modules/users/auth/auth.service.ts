@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +52,6 @@ export class AuthService {
       if (userDetails == undefined) {
         return { status: 401, msg: { msg: 'Invalid credentials' } };
       }
-    
       // Проверить, совпадает ли указанный пароль с сохраненным паролем
       const isValid = bcrypt.compareSync(user.password, userDetails.password);
       if (isValid) {
@@ -72,17 +72,15 @@ export class AuthService {
     }
   }
 
-  async createUser(body: any): Promise<Record<string, any>> {
+  async createUser(createUserDto: CreateUserDto): Promise<Record<string, any>> {
     // Флаг проверки
     let isOk = false;
-
     // Преобразовать тело в DTO
-    const userDTO = new UsersDTO();
-    userDTO.email = body.email;
-    userDTO.password = bcrypt.hashSync(body.password, 10);
+
+    createUserDto.password = bcrypt.hashSync(createUserDto.password, 10);
 
     // Проверка DTO на соответствие функции проверки подлинности из класса-валидатора
-    await validate(userDTO).then((errors) => {
+    await validate(createUserDto).then((errors) => {
       if (errors.length > 0) {
         this.logger.debug(`${errors}`, AuthService.name);
       } else {
@@ -90,7 +88,7 @@ export class AuthService {
       }
     });
     if (isOk) {
-      await this.usersRepository.save(userDTO).catch((error) => {
+      await this.usersRepository.save(createUserDto).catch((error) => {
         this.logger.debug(error.message, AuthService.name);
         isOk = false;
       });

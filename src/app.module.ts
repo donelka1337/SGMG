@@ -17,9 +17,11 @@ import { Permission } from './modules/users/entity/permission.entity';
 import { Role } from './modules/users/entity/role.entity';
 import { UCR } from './modules/users/entity/UCR.entity';
 import { User } from './modules/users/entity/user.entity';
+import { LoggerService } from './modules/users/logger/logger.service';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot({
       isGlobal: true, 
       load: [configuration],  
@@ -28,22 +30,13 @@ import { User } from './modules/users/entity/user.entity';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'rfcdfhju]9',
-      database: 'test1',
+      password: '123',
+      database: 'Ssss',
       entities: ['*.entity.ts'],
       synchronize: true,
       autoLoadEntities: true,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        url: configService.get('database.uri'),
-        entities: [User, Firm, Permission, Role, UCR],
-        synchronize: true,
-      }),
-      inject: [ConfigService],
-    }),
+   
     TSModule,
     UsersModule,
     AuthModule,
@@ -53,6 +46,6 @@ import { User } from './modules/users/entity/user.entity';
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
-  providers: [AppService, UserService, AuthService, JwtService],
+  providers: [AppService, LoggerService, UserService, AuthService, JwtService],
 })
 export class AppModule {}
