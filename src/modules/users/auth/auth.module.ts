@@ -16,7 +16,7 @@ import { User } from '../entity/user.entity';
       useFactory: (configService: ConfigService) => {
         return {
           secret: `${process.env.PRIVATE_KEY}`,
-          signOptions: { expiresIn: '60s', algorithm: 'RS256' },
+          signOptions: { expiresIn: '60s' },
         };
       },
       inject: [ConfigService],

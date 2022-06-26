@@ -6,8 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from 'src/modules/users/service/user/user.service';
+import { JwtAuthGuard } from '../../auth/strategy/jwt-auth.guard';
 //import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 //import { UpdateUserDto } from 'src/modules/users/dto/user.dto';
 
@@ -24,7 +26,7 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOneById(@Param('id') id: number) {
     return this.userService.findOneById(+id);
